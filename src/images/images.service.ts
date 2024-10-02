@@ -41,6 +41,7 @@ export class ImagesService {
     const localImagePath = path.join(uploadDir, fileName);
 
     try {
+      console.log('vai baixar em:', url)
       const response = await axios.get(url, {
         responseType: 'stream',
         headers: {
@@ -50,7 +51,7 @@ export class ImagesService {
       });
 
       const writer = fs.createWriteStream(localImagePath);
-
+      console.log('response:', response)
       return new Promise((resolve, reject) => {
         response.data.pipe(writer);
         writer.on('finish', () => {
