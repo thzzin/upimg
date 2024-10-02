@@ -42,6 +42,7 @@ export class ImagesService {
 
     try {
       console.log('vai baixar em:', url)
+      console.log('token', token)
       const response = await axios.get(url, {
         responseType: 'stream',
         headers: {
@@ -72,7 +73,7 @@ export class ImagesService {
       throw new Error('O caminho da imagem não existe: ' + localImagePath);
     }
 
-    const baseUrl = 'http://localhost:3000/uploads';
+    const baseUrl = 'https://getluvia.com.br:3005/uploads';
     const fileName = path.basename(localImagePath);
     const res = `${baseUrl}/${fileName}`;
     return res;
