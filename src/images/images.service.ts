@@ -41,8 +41,6 @@ export class ImagesService {
     const localImagePath = path.join(uploadDir, fileName);
 
     try {
-      console.log('vai baixar em:', url)
-      console.log('token', token)
       const response = await axios.get(url, {
         responseType: 'stream',
         headers: {
@@ -52,7 +50,7 @@ export class ImagesService {
       });
 
       const writer = fs.createWriteStream(localImagePath);
-      console.log('response:', response)
+
       return new Promise((resolve, reject) => {
         response.data.pipe(writer);
         writer.on('finish', () => {
@@ -73,7 +71,7 @@ export class ImagesService {
       throw new Error('O caminho da imagem não existe: ' + localImagePath);
     }
 
-    const baseUrl = 'https://getluvia.com.br:3005/uploads';
+    const baseUrl = 'http://getluvia.com.br:3003/uploads';
     const fileName = path.basename(localImagePath);
     const res = `${baseUrl}/${fileName}`;
     return res;
