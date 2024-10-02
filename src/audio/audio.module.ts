@@ -6,4 +6,4 @@ import {UploadController} from '../upload/upload.controller'
   controllers: [AudioController, UploadController],
   providers: [AudioService],
 })
-export class ImagesModule {}
+export class AudioModule {}
