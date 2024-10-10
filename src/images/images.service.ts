@@ -32,41 +32,47 @@ export class ImagesService {
     const uploadDir = path.join(__dirname, '..', 'images/uploads');
 
     if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+        fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     const timestamp = Date.now();
-    const localImagePath = path.join(uploadDir, `image_${timestamp}`); // Nome do arquivo sem extensão por enquanto
+    const localImagePath = path.join(uploadDir, `image_${timestamp}`); // Nome do arquivo sem extensão
 
     try {
-      const response = await axios.get(url, {
-        responseType: 'stream',
-        headers: {
-          Accept: '*/*',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const mimeType = response.headers['content-type']; // Obtém o tipo MIME da resposta
-      const fileExtension = this.getFileExtension(mimeType); // Obtém a extensão correspondente
-      const finalImagePath = localImagePath + fileExtension; // Cria o caminho final com a extensão
-
-      const writer = fs.createWriteStream(finalImagePath);
-
-      return new Promise((resolve, reject) => {
-        response.data.pipe(writer);
-        writer.on('finish', () => {
-          resolve(finalImagePath);
+        const response = await axios.get(url, {
+            responseType: 'stream',
+            headers: {
+                Accept: '*/*',
+                Authorization: `Bearer ${token}`,
+            },
         });
-        writer.on('error', (error) => {
-          reject(error);
+
+        const mimeType = response.headers['content-type']; // Obtém o tipo MIME da resposta
+        console.log('Tipo MIME obtido:', mimeType); // Log para verificar o MIME type
+
+        const fileExtension = this.getFileExtension(mimeType); // Obtém a extensão correspondente
+        console.log('Extensão do arquivo:', fileExtension); // Log para verificar a extensão
+
+        const finalImagePath = localImagePath + fileExtension; // Cria o caminho final com a extensão
+        console.log('Caminho final da imagem:', finalImagePath); // Log para verificar o caminho final
+
+        const writer = fs.createWriteStream(finalImagePath);
+
+        return new Promise((resolve, reject) => {
+            response.data.pipe(writer);
+            writer.on('finish', () => {
+                resolve(finalImagePath);
+            });
+            writer.on('error', (error) => {
+                reject(error);
+            });
         });
-      });
     } catch (error) {
-      console.error('Erro na requisição Axios:', error.message);
-      throw new Error('Erro ao baixar a imagem');
+        console.error('Erro na requisição Axios:', error.message);
+        throw new Error('Erro ao baixar a imagem');
     }
-  }
+}
+
 
  private getFileExtension(mimeType: string): string {
   const mimeMap: { [key: string]: string } = {
@@ -96,6 +102,11 @@ export class ImagesService {
     'video/3gp': '.3gp',
     'video/mp4': '.mp4',
   };
+
+   if (mimeType === 'text/plain') {
+    return '.txt';
+}
+
 
   return mimeMap[mimeType] || '.jpg'; // Retorna .jpg como padrão se o tipo não for reconhecido
 }
