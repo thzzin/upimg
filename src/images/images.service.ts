@@ -119,6 +119,7 @@ export class ImagesService {
     const baseUrl = 'http://getluvia.com.br:3003/uploads';
     const fileName = path.basename(localImagePath);
     const res = `${baseUrl}/${fileName}`;
+    console.log('res', res)
     return res;
   }
 }
