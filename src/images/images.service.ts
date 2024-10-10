@@ -5,7 +5,7 @@ import * as path from 'path';
 
 @Injectable()
 export class ImagesService {
-  async getUrl(idImage: string): Promise<{ url: string; mime_type: string }> {
+  async getUrl(idImage: string): Promise<string> {
     const token = 'EAAPQis7WA0sBO7hpYbDoUnJVk75Mz2hZA59tze8HQ4Yrdqw8R40a8d2gQFmMvzAm0i7gyASQnhCaJAw01aeRL6bFnthAr6Y02Bmlz8aUFmJJRnnLfUINBtj8X2bP28ZCNY9sRxbzJBd59BZArSoftPv1LH6ZBT8KZAxOiwQGuG305se3it1ZCaMgt0KAkymKx0XwZDZD'; // Substitua por seu token
 
     try {
@@ -18,21 +18,17 @@ export class ImagesService {
         },
       );
 
-      if (!response.data.url || !response.data.mime_type) {
-        throw new Error('URL ou tipo MIME não encontrado na resposta da API');
+      if (!response.data.url) {
+        throw new Error('URL não encontrada na resposta da API');
       }
-
-      return {
-        url: response.data.url,
-        mime_type: response.data.mime_type,
-      };
+      return response.data.url;
     } catch (error) {
       console.error('Erro ao buscar a URL da imagem:', error.message);
       throw new Error('Não foi possível obter a URL da imagem');
     }
   }
 
-  async downloadWhatsAppImage(url: string, token: string, mimeType: string): Promise<string> {
+  async downloadWhatsAppImage(url: string, token: string): Promise<string> {
     const uploadDir = path.join(__dirname, '..', 'images/uploads');
 
     if (!fs.existsSync(uploadDir)) {
@@ -40,9 +36,7 @@ export class ImagesService {
     }
 
     const timestamp = Date.now();
-    const fileExtension = this.getFileExtension(mimeType); // Determina a extensão do arquivo
-    const fileName = `image_${timestamp}${fileExtension}`; // Cria o nome do arquivo com a extensão correta
-    const localImagePath = path.join(uploadDir, fileName);
+    const localImagePath = path.join(uploadDir, `image_${timestamp}`); // Nome do arquivo sem extensão por enquanto
 
     try {
       const response = await axios.get(url, {
@@ -53,12 +47,16 @@ export class ImagesService {
         },
       });
 
-      const writer = fs.createWriteStream(localImagePath);
+      const mimeType = response.headers['content-type']; // Obtém o tipo MIME da resposta
+      const fileExtension = this.getFileExtension(mimeType); // Obtém a extensão correspondente
+      const finalImagePath = localImagePath + fileExtension; // Cria o caminho final com a extensão
+
+      const writer = fs.createWriteStream(finalImagePath);
 
       return new Promise((resolve, reject) => {
         response.data.pipe(writer);
         writer.on('finish', () => {
-          resolve(localImagePath);
+          resolve(finalImagePath);
         });
         writer.on('error', (error) => {
           reject(error);
