@@ -6,7 +6,7 @@ import * as path from 'path';
 @Injectable()
 export class ImagesService {
   async getUrl(idImage: string): Promise<{ url: string; mime_type: string }> {
-    const token = 'YOUR_ACCESS_TOKEN'; // Substitua por seu token
+    const token = 'EAAPQis7WA0sBO7hpYbDoUnJVk75Mz2hZA59tze8HQ4Yrdqw8R40a8d2gQFmMvzAm0i7gyASQnhCaJAw01aeRL6bFnthAr6Y02Bmlz8aUFmJJRnnLfUINBtj8X2bP28ZCNY9sRxbzJBd59BZArSoftPv1LH6ZBT8KZAxOiwQGuG305se3it1ZCaMgt0KAkymKx0XwZDZD'; // Substitua por seu token
 
     try {
       const response = await axios.get(
@@ -40,8 +40,8 @@ export class ImagesService {
     }
 
     const timestamp = Date.now();
-    const fileExtension = this.getFileExtension(mimeType);
-    const fileName = `image_${timestamp}${fileExtension}`;
+    const fileExtension = this.getFileExtension(mimeType); // Determina a extensão do arquivo
+    const fileName = `image_${timestamp}${fileExtension}`; // Cria o nome do arquivo com a extensão correta
     const localImagePath = path.join(uploadDir, fileName);
 
     try {
