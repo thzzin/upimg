@@ -68,17 +68,38 @@ export class ImagesService {
     }
   }
 
-  private getFileExtension(mimeType: string): string {
-    const mimeMap: { [key: string]: string } = {
-      'image/jpeg': '.jpg',
-      'image/png': '.png',
-      'image/gif': '.gif',
-      'image/webp': '.webp',
-      // Adicione mais tipos MIME conforme necessário
-    };
+ private getFileExtension(mimeType: string): string {
+  const mimeMap: { [key: string]: string } = {
+    // Tipos de Áudio
+    'audio/aac': '.aac',
+    'audio/amr': '.amr',
+    'audio/mpeg': '.mp3',
+    'audio/mp4': '.m4a',
+    'audio/ogg': '.ogg',
 
-    return mimeMap[mimeType] || '.jpg'; // Retorna .jpg como padrão se o tipo não for reconhecido
-  }
+    // Tipos de Documento
+    'text/plain': '.txt',
+    'application/vnd.ms-excel': '.xls',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+    'application/msword': '.doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+    'application/vnd.ms-powerpoint': '.ppt',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+    'application/pdf': '.pdf',
+
+    // Tipos de Imagem
+    'image/jpeg': '.jpeg',
+    'image/png': '.png',
+    'image/webp': '.webp', // Considerando stickers também
+
+    // Tipos de Vídeo
+    'video/3gp': '.3gp',
+    'video/mp4': '.mp4',
+  };
+
+  return mimeMap[mimeType] || '.jpg'; // Retorna .jpg como padrão se o tipo não for reconhecido
+}
+
 
   async uploadToLocal(localImagePath: string): Promise<string> {
     if (!fs.existsSync(localImagePath)) {
