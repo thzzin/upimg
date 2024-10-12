@@ -70,7 +70,7 @@ export class AudioService {
       throw new Error('O caminho da imagem não existe: ' + localImagePath);
     }
 
-    const baseUrl = 'http://getluvia.com.br:3003/uploads';
+    const baseUrl = 'https://getluvia.com.br:3003/uploads';
     const fileName = path.basename(localImagePath);
     const res = `${baseUrl}/${fileName}`;
     return res;
