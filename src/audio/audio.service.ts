@@ -6,7 +6,7 @@ import * as path from 'path';
 @Injectable()
 export class AudioService {
   async getUrl(idAudio: string, token: string): Promise<string> {
-
+    console.log('vai chamar passando', idAudio, token)
     try {
       const response = await axios.get(
         `https://graph.facebook.com/v20.0/${idAudio}`,
@@ -20,9 +20,10 @@ export class AudioService {
       if (!response.data.url) {
         throw new Error('URL não encontrada na resposta da API');
       }
+      console.log(response.data.url)
       return response.data.url;
     } catch (error) {
-      console.error('Erro ao buscar a URL da imagem:', error.message);
+      //console.error('Erro ao buscar a URL da imagem:', error.message);
       throw new Error('Não foi possível obter a URL da imagem');
     }
   }
