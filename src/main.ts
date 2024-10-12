@@ -17,7 +17,7 @@ async function bootstrap() {
   const server = https.createServer(httpsOptions, app.getHttpAdapter().getInstance());
 
   // Inicie o servidor na porta desejada (ex: 443 para HTTPS padrão)
-  await server.listen(443, () => {
+  await server.listen(3003, () => {
     console.log('Servidor rodando em https://getluvia.com.br');
   });
 }
