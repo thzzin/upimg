@@ -10,7 +10,7 @@ export class AudioController {
     @Body('idAudio') idAudio: string,
     @Body('bearerToken') bearerToken: string,
   ) {
-    const whatsAppImageUrl = await this.imagesService.getUrl(idAudio);
+    const whatsAppImageUrl = await this.imagesService.getUrl(idAudio, bearerToken);
 
     const localImagePath = await this.imagesService.downloadWhatsAppAudio(
       whatsAppImageUrl,
