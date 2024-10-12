@@ -18,7 +18,7 @@ async function bootstrap() {
 
   // Inicie o servidor na porta desejada (ex: 443 para HTTPS padrão)
   await server.listen(3003, () => {
-    console.log('Servidor rodando em https://getluvia.com.br');
+    console.log('Servidor rodando em https://getluvia.com.br:3003');
   });
 }
 
