@@ -10,7 +10,7 @@ export class ImagesController {
     @Body('idImage') idImage: string,
     @Body('bearerToken') bearerToken: string,
   ) {
-    const whatsAppImageUrl = await this.imagesService.getUrl(idImage);
+    const whatsAppImageUrl = await this.imagesService.getUrl(idImage, bearerToken);
 
     const localImagePath = await this.imagesService.downloadWhatsAppImage(
       whatsAppImageUrl,
